@@ -97,17 +97,45 @@ public class Network {
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
      *  the user that has the maximal mutual number of followees as the user with the given name. */
-    public String recommendWhoToFollow(String name) {
-        User recommendedUser =null;
-        if(users[0].getName().equals(name))recommendedUser = users[1];
-        else recommendedUser = users[0];
-        for(int i=0;i<userCount;i++)
+    public String recommendWhoToFollow(String name)
+     {
+        String recommendedUser = null;
+        int max = -1;
+        User rec = getUser(name);
+        if(rec == null) 
         {
-            if(users[i].getName().equals(name)) continue;
-            else if(users[i].countMutual(getUser(name))>recommendedUser.countMutual(getUser(name))) recommendedUser =users[i];
+            System.out.println("Error: User '" + name + "' does not exist in the network.");
+            return null;
         }
-
-        return recommendedUser.getName();
+    
+        if(userCount <= 1)
+        {
+            System.out.println("No recommendation available for '" + name + "'.");
+            return null;
+        }
+        for (int i = 0; i < userCount; i++)
+        {
+            User otherUser = users[i];
+    
+            if (!otherUser.getName().equalsIgnoreCase(name) && !rec.follows(otherUser.getName())) 
+            {
+                int mutualC = rec.countMutual(otherUser);
+                if (mutualC > max) {
+                    max = mutualC;
+                    recommendedUser = otherUser.getName();
+                }
+            }
+        }
+    
+        if(recommendedUser != null)
+        {
+            System.out.println("Recommendation for '" + name + "': Follow '" + recommendedUser + "'.");
+        }
+        else
+        {
+            System.out.println("No recommendation available for '" + name + "'.");
+        }
+        return recommendedUser;
     }
 
     /** Computes and returns the name of the most popular user in this network: 
