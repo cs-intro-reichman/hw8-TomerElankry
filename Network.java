@@ -41,16 +41,8 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if (userCount >= users.length) {
-            System.out.println("Error: The network is full.");
-            return false;
-        }
-    
-        if (getUser(name) != null) {
-            System.out.println("Error: A user with the name '" + name + "' already exists.");
-            return false;
-        }
-        
+        if(userCount==users.length) return false;
+        if(getUser(name)!=null) return false;
         users[userCount] = new User(name);
         userCount++;
         return true;
@@ -60,82 +52,23 @@ public class Network {
      *  If any of the two names is not a user in this network,
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
-        if(name1 == null || name2 == null) 
-        {
-            System.out.println("Error: One of the user names is null.");
-            return false;
-        }
-        User userL = getUser(name1);
-
-        if(userL == null)
-        {
-            System.out.println("Error: User '" + name1 + "' does not exist in the network.");
-            return false;
-        }
-        User userO = getUser(name2);
-        if(userO == null)
-        {
-            System.out.println("Error: User '" + name2 + "' does not exist in the network.");
-            return false;
-        }
-        if(name1.equals(name2)) {
-            System.out.println("Error: A user cannot follow itself.");
-            return false;
-        }
-    
-        if(userL.addFollowee(name2))
-        {
-            System.out.println("Success: User '" + name1 + "' is now following '" + name2 + "'.");
-            return true;
-        }
-        else
-        {
-            System.out.println("Error: Could not add '" + name2 + "' to '" + name1 + "' follows list.");
-            return false;
-        }
+        if(getUser(name1)==null || getUser(name2)==null)return false; 
+        return getUser(name1).addFollowee(name2);
     }
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
      *  the user that has the maximal mutual number of followees as the user with the given name. */
-    public String recommendWhoToFollow(String name)
-     {
-        String recommendedUser = null;
-        int max = -1;
-        User rec = getUser(name);
-        if(rec == null) 
+    public String recommendWhoToFollow(String name) {
+        User recommendedUser =null;
+        if(users[0].getName().equals(name))recommendedUser = users[1];
+        else recommendedUser = users[0];
+        for(int i=0;i<userCount;i++)
         {
-            System.out.println("Error: User '" + name + "' does not exist in the network.");
-            return null;
+            if(users[i].getName().equals(name)) continue;
+            else if(users[i].countMutual(getUser(name))>recommendedUser.countMutual(getUser(name))) recommendedUser =users[i];
         }
-    
-        if(userCount <= 1)
-        {
-            System.out.println("No recommendation available for '" + name + "'.");
-            return null;
-        }
-        for (int i = 0; i < userCount; i++)
-        {
-            User otherUser = users[i];
-    
-            if (!otherUser.getName().equalsIgnoreCase(name) && !rec.follows(otherUser.getName())) 
-            {
-                int mutualC = rec.countMutual(otherUser);
-                if (mutualC > max) {
-                    max = mutualC;
-                    recommendedUser = otherUser.getName();
-                }
-            }
-        }
-    
-        if(recommendedUser != null)
-        {
-            System.out.println("Recommendation for '" + name + "': Follow '" + recommendedUser + "'.");
-        }
-        else
-        {
-            System.out.println("No recommendation available for '" + name + "'.");
-        }
-        return recommendedUser;
+
+        return recommendedUser.getName();
     }
 
     /** Computes and returns the name of the most popular user in this network: 
@@ -165,7 +98,7 @@ public class Network {
        String ans = "Network: ";
        for(int i=0;i<userCount;i++)
        {
-          ans+="\n" + users[i].toString();
+          ans+="\n" +users[i].toString();
        }
        return ans;
     }
