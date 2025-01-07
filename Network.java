@@ -41,8 +41,16 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if(userCount==users.length) return false;
-        if(getUser(name)!=null) return false;
+        if (userCount >= users.length) {
+            System.out.println("Error: The network is full.");
+            return false;
+        }
+    
+        if (getUser(name) != null) {
+            System.out.println("Error: A user with the name '" + name + "' already exists.");
+            return false;
+        }
+        
         users[userCount] = new User(name);
         userCount++;
         return true;
