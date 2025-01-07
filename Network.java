@@ -52,8 +52,39 @@ public class Network {
      *  If any of the two names is not a user in this network,
      *  or if the "follows" addition failed for some reason, returns false. */
     public boolean addFollowee(String name1, String name2) {
-        if(getUser(name1)==null || getUser(name2)==null)return false; 
-        return getUser(name1).addFollowee(name2);
+        if(name1 == null || name2 == null) 
+        {
+            System.out.println("Error: One of the user names is null.");
+            return false;
+        }
+        User userL = getUser(name1);
+
+        if(userL == null)
+        {
+            System.out.println("Error: User '" + name1 + "' does not exist in the network.");
+            return false;
+        }
+        User userO = getUser(name2);
+        if(userO == null)
+        {
+            System.out.println("Error: User '" + name2 + "' does not exist in the network.");
+            return false;
+        }
+        if(name1.equals(name2)) {
+            System.out.println("Error: A user cannot follow itself.");
+            return false;
+        }
+    
+        if(userL.addFollowee(name2))
+        {
+            System.out.println("Success: User '" + name1 + "' is now following '" + name2 + "'.");
+            return true;
+        }
+        else
+        {
+            System.out.println("Error: Could not add '" + name2 + "' to '" + name1 + "' follows list.");
+            return false;
+        }
     }
     
     /** For the user with the given name, recommends another user to follow. The recommended user is
