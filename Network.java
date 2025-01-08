@@ -27,8 +27,10 @@ public class Network {
      *  Notice that the method receives a String, and returns a User object. */
     public User getUser(String name) {
         for (int i = 0; i < userCount; i++) {
-            if (users[i].getName() != null && name != null) {
-                if (users[i].getName().toLowerCase().equals(name.toLowerCase())) {
+            if (users[i].getName() != null && name != null)
+            {
+                if (users[i].getName().toLowerCase().equals(name.toLowerCase())) 
+                {
                     return users[i];
                 }
             }
@@ -45,10 +47,12 @@ public class Network {
     *  If the given name is already a user in this network, does nothing and returns false;
     *  Otherwise, creates a new user with the given name, adds the user to this network, and returns true. */
     public boolean addUser(String name) {
-        if ((userCount == users.length) || !(this.getUser(name) == null)) {
+        if ((userCount == users.length) || !(this.getUser(name) == null)) 
+        {
             return false;
         }
-        else {
+        else 
+        {
             this.users[userCount] = new User(name);
             this.userCount++;
             return true;
@@ -62,7 +66,8 @@ public class Network {
         if ((getUser(name1) == null) || (getUser(name2) == null || (name1.equals(name2)))) {
             return false;
         }
-        else {
+        else 
+        {
             return getUser(name1).addFollowee(name2);
         }
     }
@@ -71,18 +76,18 @@ public class Network {
      *  the user that has the maximal mutual number of followees as the user with the given name. */
     public String recommendWhoToFollow(String name) {
         if (userCount == 0) { return "null"; }
-        User mostRecomendedToFollow = null;
-        int max = 0;
+        User mostRecomended = null;
+        int m= 0;
         for (int i = 0; i < userCount; i++) {
-            if (getUser(name).countMutual(users[i]) > max) {
+            if (getUser(name).countMutual(users[i]) > m) {
                 if (users[i].follows(name) || users[i].getName().equals(name))
                  continue;
 
-                max = this.getUser(name).countMutual(users[i]);
-                mostRecomendedToFollow = users[i];
+                m = this.getUser(name).countMutual(users[i]);
+                mostRecomended = users[i];
             }
         }
-        return mostRecomendedToFollow.getName();
+        return mostRecomended.getName();
     }
 
     /** Computes and returns the name of the most popular user in this network: 
