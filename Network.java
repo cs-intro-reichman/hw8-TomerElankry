@@ -77,7 +77,7 @@ public class Network {
        String mostP = users[0].getName();
        for(int i=0;i<userCount;i++)
        {
-        if(followeeCount(users[i].getName()) > followeeCount(mostP)) mostP = users[i].getName();
+        if((users[i] ==null) && (followeeCount(users[i].getName()) > followeeCount(mostP))) mostP = users[i].getName();
        }
        return mostP;
     }
