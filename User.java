@@ -1,6 +1,5 @@
-/** Represents a user in a social network. A user is characterized by a name,
- *  a list of user names that s/he follows, and the list's size. */
- public class User {
+
+public class User {
 
     // Maximum number of users that a user can follow
     static int maxfCount = 10;
@@ -52,24 +51,14 @@
     /** Makes this user follow the given name. If successful, returns true. 
      *  If this user already follows the given name, or if the follows list is full, does nothing and returns false; */
     public boolean addFollowee(String name) {
-        char first = name.charAt(0);
-        String newN = first + name.substring(1);
-        if (first >= 'a' && first <= 'z') {
-            first = (char) (first - 32);
+        if(fCount==maxfCount) return false;
+        for(int i=0;i<fCount;i++)
+        {
+            if(this.follows[i].equals(name)) return false;
         }
-       
-
-        for (int i=0; i<follows.length;i++) {
-            if (follows[i] != null && follows[i].equals(newN)) {
-                return false;
-            }
-            if (follows[i] == null) {
-                follows[i] = newN;
-                fCount++;
-                return true;
-            }
-        }
-        return false;
+        this.follows[fCount] = name;
+        fCount++;
+        return true;
     }
 
     /** Removes the given name from the follows list of this user. If successful, returns true.
