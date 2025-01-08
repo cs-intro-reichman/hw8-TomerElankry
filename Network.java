@@ -70,6 +70,7 @@ public class Network {
     /** For the user with the given name, recommends another user to follow. The recommended user is
      *  the user that has the maximal mutual number of followees as the user with the given name. */
     public String recommendWhoToFollow(String name) {
+        if (userCount == 0) { return "null"; }
         User mostRecomendedToFollow = null;
         int max = 0;
         for (int i = 0; i < userCount; i++) {
